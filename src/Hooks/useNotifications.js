@@ -1,8 +1,11 @@
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
+import { useStateContext } from "../context";
 
 export const useNotifications = () => {
+  const { setExpoToken } = useStateContext();
+
   const registerForPushNotificationsAsync = async () => {
     let token;
     if (Device.isDevice) {
@@ -19,6 +22,7 @@ export const useNotifications = () => {
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
       console.log("Token: ", token);
+      setExpoToken(token);
     } else {
       alert("Must use physical device for Push Notifications");
     }
